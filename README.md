@@ -3,9 +3,6 @@
 ## Overview
 This project provides a step-by-step guide to building a data analytics solution for ingesting, storing, and visualizing clickstream data using AWS managed services. The solution is designed for a restaurant owner to derive insights from menu items ordered at the restaurant.
 
-## Architecture Diagram
-![Architecture Diagram](architecture-diagram.png)
-
 In this architecture:
 - **API Gateway** ingests clickstream data.
 - **Lambda Function** transforms the data and sends it to **Kinesis Data Firehose**.
@@ -14,6 +11,7 @@ In this architecture:
 - **Amazon QuickSight** is used for data visualization.
 
 ## Table of Contents
+- [Architecture Diagram](architecture-diagram)
 - [Task 1: Setup IAM Policy and Role](#task-1-setup-iam-policy-and-role)
   - [Step 1.1: Creating Custom IAM Policies](#step-11-creating-custom-iam-policies)
   - [Step 1.2: Creating an IAM Role and Attaching a Policy](#step-12-creating-an-iam-role-and-attaching-a-policy)
@@ -26,6 +24,10 @@ In this architecture:
 - [Task 6: Creating an API in API Gateway](#task-6-creating-an-api-in-api-gateway)
 
 ---
+
+## Architecture Diagram
+
+![image](https://github.com/user-attachments/assets/c02c59c7-4638-48b5-bae3-4f9005fc2c29)
 
 ## Task 1: Setup IAM Policy and Role
 
