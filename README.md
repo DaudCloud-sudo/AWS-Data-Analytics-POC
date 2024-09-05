@@ -244,6 +244,127 @@ This task involves creating an Athena table to query the ingested data.
      "storage.location.template" = "s3://<your-bucket-name>/${datehour}/"
    );
 
-   
+## Task 8: Visualizing Data with QuickSight
+
+After the clickstream data is processed successfully, you can use Amazon QuickSight to visualize and analyze the data, helping you gain insights and publish dashboards.
+
+### For New Amazon QuickSight Users
+
+1. **Open the QuickSight Service Console:**
+   - Go to the [Amazon QuickSight Console](https://quicksight.aws.amazon.com/).
+
+2. **Sign Up for QuickSight:**
+   - Choose `Sign up for QuickSight`.
+   - Select `Enterprise` and click `Continue`.
+   - Complete the account setup and choose `Finish`.
+
+3. **Configure QuickSight Permissions:**
+   - In the upper-right corner, open the user menu by choosing the user icon, then select `Manage QuickSight`.
+   - Navigate to `Security & permissions` and choose `Manage` under `QuickSight access to AWS services`.
+   - Under `Amazon S3`, select `Select S3 buckets`.
+   - Choose the S3 bucket created in this exercise and also select `Write` permission for Athena Workgroup.
+   - Click `Finish` and save your changes.
+
+4. **Return to the QuickSight Console:**
+   - In the `Analyses` tab, select `New analysis`.
+   - Choose `New dataset`.
+   - Select `Athena` and configure the following settings:
+     - **Data source name:** `poc-clickstream`
+     - **Select workgroup:** `[primary]`
+   - Click `Create data source`.
+
+5. **Create a Dataset:**
+   - In the `Choose your table` dialog box, select the `my_ingested_data` table and choose `Select`.
+   - In the `Finish dataset creation` dialog box, ensure `Import to SPICE for quicker analytics` is selected, then choose `Visualize`.
+
+6. **View Your Visualization:**
+   - Select field items and visual types for your diagram to explore and analyze your data.
+
+   For more information on visualizing data in Amazon QuickSight, refer to the [QuickSight Tutorial](https://docs.aws.amazon.com/quicksight/latest/user/welcome.html).
+
+### For Existing Amazon QuickSight Users
+
+1. **Open the QuickSight Service Console:**
+   - Go to the [Amazon QuickSight Console](https://quicksight.aws.amazon.com/).
+
+2. **Configure QuickSight Permissions:**
+   - In the upper-right corner, open the user menu by choosing the user icon, then select `Manage QuickSight`.
+   - Navigate to `Security & permissions` and choose `Manage` under `QuickSight access to AWS services`.
+   - Under `Amazon S3`, select `Select S3 buckets`.
+   - Choose the S3 bucket created in this exercise and also select `Write` permission for Athena Workgroup.
+   - Click `Finish` and save your changes.
+
+3. **Return to the QuickSight Console:**
+   - Choose `New analysis`.
+   - Select `New dataset`.
+   - Choose `Athena` and configure these settings:
+     - **Data source name:** `poc-clickstream`
+     - **Athena workgroup:** `[primary]`
+   - Click `Create data source`.
+
+4. **Create a Dataset:**
+   - In the `Choose your table` dialog box, select `my_ingested_data` and choose `Select`.
+   - In the `Finish dataset creation` dialog box, keep `Import to SPICE for quicker analytics` selected and choose `Visualize`.
+
+5. **View Your Visualization:**
+   - Select field items and visual types for your diagram to explore and analyze your data.
+
+   For more information on visualizing data in Amazon QuickSight, refer to the [QuickSight Tutorial](https://docs.aws.amazon.com/quicksight/latest/user/welcome.html).
+
+## Task 9: Deleting All Resources
+
+To avoid incurring costs, it’s important to delete all AWS resources created in this exercise.
+
+1. **Delete QuickSight Dashboards:**
+   - Return to the [QuickSight Console](https://quicksight.aws.amazon.com/).
+   - If needed, in the navigation pane, choose `Analyses`.
+   - On the `my_ingested_data` card, open the actions menu (ellipsis icon).
+   - Choose `Delete` and confirm your action.
+   - Confirm your action again.
+   - In the navigation pane, choose `Datasets`.
+   - For each dataset, open the actions menu (ellipsis icon) and choose `Delete`, then confirm your action.
+
+2. **Delete Your QuickSight Account:**
+   - If you will not be using QuickSight in the future, delete your account.
+   - In the QuickSight console, choose the user icon and then `Manage QuickSight`.
+   - In the navigation pane, choose `Account settings`.
+   - Choose `Delete account` and confirm your action.
+
+3. **Delete the S3 Bucket:**
+   - Return to the [Amazon S3 Console](https://s3.console.aws.amazon.com/).
+   - Choose the bucket created for this exercise and delete all files in the bucket.
+   - Select the bucket name, choose `Delete`, and confirm your action.
+
+4. **Delete the Athena Table and Queries:**
+   - Return to the [Athena Console](https://athena.aws.amazon.com/).
+   - Ensure you are on the `Editor` tab.
+   - In the navigation pane, on the actions menu (ellipsis icon) for `my_ingested_data`, choose `Delete table` and confirm your action.
+   - Close the queries you created.
+   - Choose the `Settings` tab and then `Manage`.
+   - Remove the path to the S3 bucket and save your changes.
+
+5. **Delete the API Gateway Configuration:**
+   - Return to the [API Gateway Console](https://console.aws.amazon.com/apigateway/).
+   - Select the API you created.
+   - On the `Actions` menu, choose `Delete` and confirm your action.
+
+6. **Delete the Kinesis Data Firehose Delivery Stream:**
+   - Return to the [Kinesis Console](https://console.aws.amazon.com/kinesis/).
+   - In the navigation pane, choose `Delivery streams`.
+   - Select the delivery stream you created, choose `Delete`, and confirm your action.
+
+7. **Delete the Lambda Function:**
+   - Return to the [Lambda Console](https://console.aws.amazon.com/lambda/).
+   - Select the `transform-data` Lambda function.
+   - On the `Actions` menu, choose `Delete` and confirm your action.
+
+8. **Delete the IAM Roles and Policies:**
+   - Return to the [IAM Dashboard](https://console.aws.amazon.com/iam/).
+   - In the navigation pane, choose `Roles`.
+   - Select `APIGateway-Firehose`, choose `Delete`, and confirm your action.
+   - In the navigation pane, choose `Policies`.
+   - Select `API-Firehose`.
+   - On the `Actions` menu, choose `Delete` and confirm the deletion.
+
 
 This README.md file provides a comprehensive guide to setting up the architecture for data analytics on AWS, including step-by-step instructions for creating the necessary resources and configuring them.
