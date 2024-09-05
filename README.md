@@ -22,6 +22,9 @@ In this architecture:
   - [Step 4.2: Copying the ARN of the IAM Role](#step-42-copying-the-arn-of-the-iam-role)
 - [Task 5: Adding Firehose Delivery Stream ARN to S3 Bucket](#task-5-adding-firehose-delivery-stream-arn-to-s3-bucket)
 - [Task 6: Creating an API in API Gateway](#task-6-creating-an-api-in-api-gateway)
+- [Task 7: Creating an Athena Table](#task-7-creating-an-athena-table)
+- [Task 8: Visualizing Data with QuickSight](#task-8-visualizing-data-with-quicksight)
+- [Task 9: Deleting Resources](#task-9-deleting-resources)
 
 ---
 
@@ -61,12 +64,16 @@ In this architecture:
 5. Attach the `API-Firehose` policy to the role.
 6. Copy the ARN of the role and save it for later use.
 
+![image](https://github.com/user-attachments/assets/0b8ffdd7-eefd-41f5-86aa-85182d5c0683)
+
 ## Task 2: Creating an S3 Bucket
 1. In the AWS Management Console, search for **S3** and open the service.
 2. Choose **Create bucket**.
-3. Enter a unique bucket name (e.g., `architecting-week2-<your initials>`).
+3. Enter a unique bucket name (e.g., `architecting-data-analytics-<your initials>`).
 4. Ensure the region is set to **US East (N. Virginia) us-east-1**.
 5. Create the bucket and save the ARN of the bucket for later use.
+
+![image](https://github.com/user-attachments/assets/5df86fd4-6b96-4704-ba31-9a2278851ebe)
 
 ## Task 3: Creating a Lambda Function
 1. Search for and open the **Lambda** service in the AWS Management Console.
@@ -99,6 +106,8 @@ In this architecture:
 7. Deploy the function and set the timeout to 10 seconds.
 8. Save the function ARN for later use.
 
+![image](https://github.com/user-attachments/assets/a5d39001-5296-4150-97fb-d6858f305f5b)
+
 ## Task 4: Creating a Kinesis Data Firehose Delivery Stream
 
 ### Step 4.1: Creating the Delivery Stream
@@ -112,9 +121,13 @@ In this architecture:
     - **Destination settings:** Select the S3 bucket created in Task 2
 4. Create the delivery stream.
 
+![image](https://github.com/user-attachments/assets/869f320e-8274-4e55-a323-87d8352f6d1b)
+
 ### Step 4.2: Copying the ARN of the IAM Role
 1. Go to the delivery stream's configuration page.
 2. In the **Service access** section, copy the ARN of the IAM role and save it for later use.
+
+![image](https://github.com/user-attachments/assets/507f3bea-aae3-4563-bde3-64116a3c2c76)
 
 ## Task 5: Adding Firehose Delivery Stream ARN to S3 Bucket
 1. Open the Amazon S3 console and select the bucket created in Task 2.
@@ -151,33 +164,87 @@ In this architecture:
     ```
 4. Replace the placeholders with the actual ARNs and save the changes.
 
-## Task 6: Creating an API in API Gateway
-1. Open the **API Gateway** console.
-2. Choose **Build** on the REST API card and configure the following:
-    - **Protocol:** REST
-    - **API name:** `clickstream-ingest-poc`
-    - **Endpoint Type:** Regional
-3. Create the API and add a resource named `poc`.
-4. Create a `POST` method for the `poc` resource.
-5. Configure the following:
-    - **Integration type:** AWS Service
-    - **AWS Region:** us-east-1
-    - **AWS Service:** Firehose
-    - **Action:** PutRecord
-    - **Execution role:** Use the ARN of the `APIGateway-Firehose` role created in Task 1
-6. Add a mapping template with the following content:
+![image](https://github.com/user-attachments/assets/14eacffd-48b5-4db0-9275-d35170564c08)
 
-    ```json
-    {
-        "DeliveryStreamName": "<Enter the name of your delivery stream>",
-        "Record": {
-            "Data": "$util.base64Encode($util.escapeJavaScript($input.json('$')).replace('\', ''))"
-        }
-    }
-    ```
-7. Replace the `DeliveryStreamName` with the actual name of the delivery stream.
-8. Save and test the API by sending JSON payloads to simulate menu item clicks.
+## Task 6: Creating an API in API Gateway
+In this task, we create a REST API in API Gateway to serve as the communication layer between the frontend and AWS services.
+
+### Steps:
+1. Open the **API Gateway** console.
+2. On the **REST API** card, click **Build** and configure:
+   - **Protocol:** REST
+   - **Create new API:** New API
+   - **API Name:** `clickstream-ingest-poc`
+   - **Endpoint Type:** Regional
+   - Click **Create API**.
+
+3. In the **Resources** pane, click **Actions** > **Create Resource**.
+   - Name the resource `poc` and click **Create Resource**.
+
+4. Click **Actions** > **Create Method**, select **POST**, and configure the following:
+   - **Integration Type:** AWS Service
+   - **AWS Region:** `us-east-1`
+   - **AWS Service:** Firehose
+   - **Action Type:** Use action name
+   - **Action:** PutRecord
+   - **Execution Role:** Paste the ARN of the APIGateway-Firehose role created in Task 1.
+
+5. In **Integration Request**, expand **Mapping Templates** and add:
+   - **Content-Type:** `application/json`
+   - **Template Script:**
+     ```json
+     {
+       "DeliveryStreamName": "<your-delivery-stream-name>",
+       "Record": {
+         "Data": "$util.base64Encode($util.escapeJavaScript($input.json('$')).replace('\\', ''))"
+       }
+     }
+     ```
+
+6. Test the API by sending the following JSON payloads:
+   - Payload 1:
+     ```json
+     {
+       "element_clicked": "entree_1",
+       "time_spent": 67,
+       "source_menu": "restaurant_name",
+       "created_at": "2022-09-11 23:00:00"
+     }
+     ```
+   - Continue testing with other payloads.
 
 ---
+
+## Task 7: Creating an Athena Table
+This task involves creating an Athena table to query the ingested data.
+
+### Steps:
+1. Open **Athena** console > **Query Editor**.
+2. In **Settings**, choose the S3 bucket you created.
+3. Run the following script to create the table:
+   ```
+   CREATE EXTERNAL TABLE my_ingested_data (
+     element_clicked STRING,
+     time_spent INT,
+     source_menu STRING,
+     created_at STRING
+   )
+   PARTITIONED BY (
+     datehour STRING
+   )
+   ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+   with serdeproperties ( 'paths'='element_clicked, time_spent, source_menu, created_at' )
+   LOCATION "s3://<your-bucket-name>/"
+   TBLPROPERTIES (
+     "projection.enabled" = "true",
+     "projection.datehour.type" = "date",
+     "projection.datehour.format" = "yyyy/MM/dd/HH",
+     "projection.datehour.range" = "2021/01/01/00,NOW",
+     "projection.datehour.interval" = "1",
+     "projection.datehour.interval.unit" = "HOURS",
+     "storage.location.template" = "s3://<your-bucket-name>/${datehour}/"
+   );
+```
+```
 
 This README.md file provides a comprehensive guide to setting up the architecture for data analytics on AWS, including step-by-step instructions for creating the necessary resources and configuring them.
