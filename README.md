@@ -169,7 +169,6 @@ In this architecture:
 ## Task 6: Creating an API in API Gateway
 In this task, we create a REST API in API Gateway to serve as the communication layer between the frontend and AWS services.
 
-### Steps:
 1. Open the **API Gateway** console.
 2. On the **REST API** card, click **Build** and configure:
    - **Protocol:** REST
@@ -244,7 +243,7 @@ This task involves creating an Athena table to query the ingested data.
      "projection.datehour.interval.unit" = "HOURS",
      "storage.location.template" = "s3://<your-bucket-name>/${datehour}/"
    );
-```
-```
+
+   
 
 This README.md file provides a comprehensive guide to setting up the architecture for data analytics on AWS, including step-by-step instructions for creating the necessary resources and configuring them.
