@@ -398,5 +398,10 @@ To avoid incurring costs, it’s important to delete all AWS resources created i
    - Select `API-Firehose`.
    - On the `Actions` menu, choose `Delete` and confirm the deletion.
 
+### Conclusion
 
-This README.md file provides a comprehensive guide to setting up the architecture for data analytics on AWS, including step-by-step instructions for creating the necessary resources and configuring them.
+This project provided a great hands-on learning experience in building a data analytics pipeline using AWS services like **API Gateway**, **Kinesis Data Firehose**, **S3**, **Amazon Athena**, and **Quicksight**. Through this exercise, I gained practical skills in architecting and deploying real-time data processing solutions.
+
+If you're interested in learning and replicating this project, you're welcome to follow along! This project is a part of the **AWS Solutions Architect Associate exam** Course.
+
+If you're interested in continuing your AWS learning journey with similar hands-on projects, be sure to check out my [main AWS central repository](https://github.com/DaudCloud-sudo/AWS-Practice-Labs), where I list all my projects, POCs, and hands-on exercises related to AWS.
