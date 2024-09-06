@@ -199,6 +199,7 @@ In this task, we create a REST API in API Gateway to serve as the communication 
        }
      }
      ```
+  ![image](https://github.com/user-attachments/assets/bd2c83eb-fa50-462f-bbe3-dfb7aa3a062d)
 
 6. Test the API by sending the following JSON payloads:
    - Payload 1:
@@ -210,9 +211,51 @@ In this task, we create a REST API in API Gateway to serve as the communication 
        "created_at": "2022-09-11 23:00:00"
      }
      ```
-   - Continue testing with other payloads.
+   - Payload 2:
+      ```json
+      {
+          "element_clicked": "entree_1",
+          "time_spent": 12,
+          "source_menu": "restaurant_name",
+          "created_at": "2022–09–11 23:00:00"
+      }
+      ```
 
+    - Payload 3 (Entree 4):
+      ```json
+      {
+          "element_clicked": "entree_4",
+          "time_spent": 32,
+          "source_menu": "restaurant_name",
+          "createdAt": "2022–09–11 23:00:00"
+      }
+      ```
+
+    - Payload 4 (Drink 1):
+      ```json
+      {
+          "element_clicked": "drink_1",
+          "time_spent": 15,
+          "source_menu": "restaurant_name",
+          "created_at": "2022–09–11 23:00:00"
+      }
+      ```
+
+    - Payload 5 (Drink 3):
+      ```json
+      {
+          "element_clicked": "drink_3",
+          "time_spent": 14,
+          "source_menu": "restaurant_name",
+          "created_at": "2022–09–11 23:00:00"
+      }
 ---
+
+11. Confirm that the API processed the data by checking the logs for messages such as:
+    - "Successfully completed execution"
+    - "Method completed with status: 200"
+
+![image](https://github.com/user-attachments/assets/7c77df9a-d695-49cf-9e97-5fa4d15822e3)
 
 ## Task 7: Creating an Athena Table
 This task involves creating an Athena table to query the ingested data.
@@ -243,6 +286,21 @@ This task involves creating an Athena table to query the ingested data.
      "projection.datehour.interval.unit" = "HOURS",
      "storage.location.template" = "s3://<your-bucket-name>/${datehour}/"
    );
+
+4. Choose **Run** to create the table.
+
+![image](https://github.com/user-attachments/assets/50cb84dd-70eb-493e-9d89-2a8aa16148e5)
+
+6. Create a new query by selecting the **plus (+)** sign.
+7. In the query editor, paste the following SQL and choose **Run**:
+
+    ```sql
+    SELECT * FROM my_ingested_data;
+    ```
+
+10. The query results will display the entries ingested via the API.
+
+![image](https://github.com/user-attachments/assets/78af57cd-6767-4070-b83d-704342ac844a)
 
 ## Task 8: Visualizing Data with QuickSight
 
@@ -280,36 +338,10 @@ After the clickstream data is processed successfully, you can use Amazon QuickSi
 6. **View Your Visualization:**
    - Select field items and visual types for your diagram to explore and analyze your data.
 
-   For more information on visualizing data in Amazon QuickSight, refer to the [QuickSight Tutorial](https://docs.aws.amazon.com/quicksight/latest/user/welcome.html).
-
-### For Existing Amazon QuickSight Users
-
-1. **Open the QuickSight Service Console:**
-   - Go to the [Amazon QuickSight Console](https://quicksight.aws.amazon.com/).
-
-2. **Configure QuickSight Permissions:**
-   - In the upper-right corner, open the user menu by choosing the user icon, then select `Manage QuickSight`.
-   - Navigate to `Security & permissions` and choose `Manage` under `QuickSight access to AWS services`.
-   - Under `Amazon S3`, select `Select S3 buckets`.
-   - Choose the S3 bucket created in this exercise and also select `Write` permission for Athena Workgroup.
-   - Click `Finish` and save your changes.
-
-3. **Return to the QuickSight Console:**
-   - Choose `New analysis`.
-   - Select `New dataset`.
-   - Choose `Athena` and configure these settings:
-     - **Data source name:** `poc-clickstream`
-     - **Athena workgroup:** `[primary]`
-   - Click `Create data source`.
-
-4. **Create a Dataset:**
-   - In the `Choose your table` dialog box, select `my_ingested_data` and choose `Select`.
-   - In the `Finish dataset creation` dialog box, keep `Import to SPICE for quicker analytics` selected and choose `Visualize`.
-
-5. **View Your Visualization:**
-   - Select field items and visual types for your diagram to explore and analyze your data.
+  ![image](https://github.com/user-attachments/assets/9719fdde-8d29-4121-a4fd-f36fa0f06d31)
 
    For more information on visualizing data in Amazon QuickSight, refer to the [QuickSight Tutorial](https://docs.aws.amazon.com/quicksight/latest/user/welcome.html).
+
 
 ## Task 9: Deleting All Resources
 
